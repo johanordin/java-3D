@@ -29,23 +29,51 @@ public class HelloUniverse extends Applet {
       // identity. Enable the TRANSFORM_WRITE capability so that
       // our behavior code can modify it at run time. Add it to
       // the root of the subgraph.
+      
+      
       TransformGroup objRotate = new TransformGroup();
       objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-      objRoot.addChild(objRotate);
+      //objRoot.addChild(objRotate);
 
       // Create a simple Shape3D node; add it to the scene graph.
-      objRotate.addChild(new ColorCube(0.4));
-
+      //objRotate.addChild(new ColorCube(0.4));
+      
+      BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
+         
+      //---------------------------------------------
+      //Alpha positionAlpha = new Alpha(1, 100);
+      //PositionInterpolator posInt = new PositionInterpolator(positionAlpha, objRotate);
+      
+      //posInt.setSchedulingBounds(bounds);
+      //objRoot.addChild(posInt);
+          
+      TransformGroup objTransform = new TransformGroup();
+      objTransform.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+      
+      Transform3D translate = new Transform3D ();
+      Vector3f vector = new Vector3f ( 1.0f, 0.0f, 0.0f);
+      translate.setTranslation (vector);
+      
+      objTransform.setTransform(translate);  
+      objRoot.addChild(objTransform);
+      
+      //objRotate.addChild(objTransform);
+      
+      //objRotate.setTransform(translate);
+      //--------------------------------------------
+      
       // Create a new Behavior object that will perform the
       // desired operation on the specified transform and add
       // it into the scene graph.
-      Alpha rotationAlpha = new Alpha(-1, 4000);
-      RotationInterpolator rotator =
-        new RotationInterpolator(rotationAlpha, objRotate);
-      BoundingSphere bounds =
-        new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
+      Alpha rotationAlpha = new Alpha(-1, 4000);   
+      RotationInterpolator rotator = new RotationInterpolator(rotationAlpha, objRotate);
+      
       rotator.setSchedulingBounds(bounds);
-      objRoot.addChild(rotator);
+      
+      objRotate.addChild(rotator);
+      
+      objTransform.addChild(objRotate);
+      objRotate.addChild(new ColorCube(0.4));
 
       // Have Java 3D perform optimizations on this scene graph.
       objRoot.compile();
