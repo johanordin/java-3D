@@ -43,6 +43,12 @@ public class HelloUniverse extends Applet {
 	objTransRot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 	objViewTrans.addChild(objTransRot);
    
+	//----------------------------------
+	// SUN ?
+	// needs to be added 
+	
+	//----------------------------------
+	// EARTH
 	//  Planet translation - a static translation along the X-axis
 	Transform3D t = new Transform3D();
 	Vector3d positionEarth =  new Vector3d(0.6, 0.0, 0.0);
@@ -62,23 +68,25 @@ public class HelloUniverse extends Applet {
 	objTransRot.addChild(rotator1);
 	
 	// Spin Planet -
-	TransformGroup spinPlanet = new TransformGroup();
-	spinPlanet.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	TransformGroup spinEarth = new TransformGroup();
+	spinEarth.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 	
 	Transform3D yAxis2 = new Transform3D();
 	Alpha rotor2Alpha = new Alpha(-1, 1000);	
 	RotationInterpolator rotatorPlanet =
-	    new RotationInterpolator(rotor2Alpha, spinPlanet, yAxis2, 0.0f, (float) Math.PI*2.0f);
+	    new RotationInterpolator(rotor2Alpha, spinEarth, yAxis2, 0.0f, (float) Math.PI*2.0f);
 	rotatorPlanet.setSchedulingBounds(bounds);
 	
-	objTransEarth.addChild(spinPlanet);
-	spinPlanet.addChild(rotatorPlanet);
+	objTransEarth.addChild(spinEarth);
+	spinEarth.addChild(rotatorPlanet);
 	
-	spinPlanet.addChild(new ColorCube(0.1));
+	spinEarth.addChild(new ColorCube(0.1));
 	// end of node
 	//----------------------------------
 	
-	// Moon
+	
+	//----------------------------------
+	// MOON
 	 
 	//  Moon translation - a static translation along the X-axis
 	Transform3D t1 = new Transform3D();
@@ -89,7 +97,9 @@ public class HelloUniverse extends Applet {
 	//objTransMoon.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
 	objTransEarth.addChild(objTransMoon);
 	
-	 /*
+	
+	// If this section with Moon orbit and spin is commented --> Earth offset is correct??
+	// 	 /* Remove line comment here
 	// Moon orbit - followed by an animated rotation around the Y axis
 	Transform3D yAxis3 = new Transform3D();
 	Alpha rotor3Alpha = new Alpha(-1, 10000);	
@@ -99,13 +109,32 @@ public class HelloUniverse extends Applet {
 	rotator3.setSchedulingBounds(bounds);
 	
 	objTransEarth.addChild(rotator3);
-	  */
+	
+	// Spin Moon -
+	TransformGroup spinMoon = new TransformGroup();
+	spinMoon.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	
+	Transform3D yAxis4 = new Transform3D();
+	Alpha rotor4Alpha = new Alpha(-1, 2000);	
+	RotationInterpolator rotatorMoon =
+	    new RotationInterpolator(rotor4Alpha, spinMoon, yAxis4, 0.0f, -(float) Math.PI*2.0f);
+	rotatorMoon.setSchedulingBounds(bounds);
+	
+	objTransMoon.addChild(spinMoon);
+	spinMoon.addChild(rotatorMoon);
+	
+	spinMoon.addChild(new ColorCube(0.05));
+	// end of node
+	
+
+	//  */ // Remove line comment here
+	//objTransMoon.addChild(new ColorCube(0.05));
 	
 	
 	
-	objTransMoon.addChild(new ColorCube(0.05));
 	
-	 
+	//----------------------------------
+
 	
 	
 	
