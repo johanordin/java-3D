@@ -29,37 +29,39 @@ public class HelloUniverse extends Applet {
 	// Create the root of the branch graph
 	BranchGroup objRoot = new BranchGroup();
 	
+	Transform3D t;
+	
+    // Create a Transformgroup to scale all objects so they
+    // appear in the scene.
+    TransformGroup objScale = new TransformGroup();
+    Transform3D t3d = new Transform3D();
+    t3d.rotX(Math.PI/12);
+    objScale.setTransform(t3d);
+    objRoot.addChild(objScale);
+	
 	BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
 	  
 	//objRoot.addChild(new ColorCube(0.4));
 	  
 	TransformGroup objRotate = new TransformGroup();
 	objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-	objRoot.addChild(objRotate);
+	objScale.addChild(objRotate);
     
-	// Create transformations for the positional lights
-	Transform3D t = new Transform3D();
-	Vector3d lPos1 =  new Vector3d(0.0, 0.0, 0.6);
+	//  a static translation along the X-axis
+	t = new Transform3D();
+	Vector3d lPos1 =  new Vector3d(0.8, 0.0, 0.0);
 	t.set(lPos1);
 	TransformGroup l1Trans = new TransformGroup(t);
 	objRotate.addChild(l1Trans);
 	
-	l1Trans.addChild(new ColorCube(0.4));
+	l1Trans.addChild(new ColorCube(0.2));
 	
-	// Create a new Behavior object that will perform the desired
-	// operation on the specified transform object and add it into the
-	// scene graph.
+	// followed by an animated rotation around the Y axis
 	Transform3D yAxis = new Transform3D();
-	Alpha rotor1Alpha = new Alpha(-1, Alpha.INCREASING_ENABLE,
-				     0, 0,
-				     4000, 0, 0,
-				     0, 0, 0);
+	Alpha rotor1Alpha = new Alpha(-1, 4000);
 	
 	RotationInterpolator rotator1 =
-	    new RotationInterpolator(rotor1Alpha,
-	    		objRotate,
-				     yAxis,
-				     0.0f, (float) Math.PI*2.0f);
+	    new RotationInterpolator(rotor1Alpha, objRotate, yAxis, 0.0f, (float) Math.PI*2.0f);
 	rotator1.setSchedulingBounds(bounds);
 	
 	objRotate.addChild(rotator1);
@@ -67,6 +69,15 @@ public class HelloUniverse extends Applet {
 
 	 // Have Java 3D perform optimizations on this scene graph.
 	 objRoot.compile();
+	 
+	 
+	 /*
+	  * Slow
+		Alpha rotor1Alpha = new Alpha(-1, Alpha.INCREASING_ENABLE,
+	     0, 0,
+	     4000, 0, 0,
+	     0, 0, 0);
+	  */
 
       return objRoot;
     }
