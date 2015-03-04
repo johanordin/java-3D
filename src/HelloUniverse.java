@@ -43,47 +43,72 @@ public class HelloUniverse extends Applet {
 	objTransRot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
 	objViewTrans.addChild(objTransRot);
    
-	//  a static translation along the X-axis
+	//  Planet translation - a static translation along the X-axis
 	Transform3D t = new Transform3D();
-	Vector3d newPos =  new Vector3d(0.6, 0.0, 0.0);
-	t.set(newPos);
-	TransformGroup trans1 = new TransformGroup(t);
-	objTransRot.addChild(trans1);
+	Vector3d positionEarth =  new Vector3d(0.6, 0.0, 0.0);
+	t.set(positionEarth);
+	TransformGroup objTransEarth = new TransformGroup(t);
+	objTransEarth.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	objTransEarth.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+	objTransRot.addChild(objTransEarth);
 	
-	// followed by an animated rotation around the Y axis
+	// Planet orbit - followed by an animated rotation around the Y axis
 	Transform3D yAxis = new Transform3D();
-	Alpha rotor1Alpha = new Alpha(-1, 10000);
-	
+	Alpha rotor1Alpha = new Alpha(-1, 10000);	
 	RotationInterpolator rotator1 =
 	    new RotationInterpolator(rotor1Alpha, objTransRot, yAxis, 0.0f, (float) Math.PI*2.0f);
 	rotator1.setSchedulingBounds(bounds);
 	
 	objTransRot.addChild(rotator1);
 	
-	// --
-	TransformGroup objRot = new TransformGroup();
-	objRot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	// Spin Planet -
+	TransformGroup spinPlanet = new TransformGroup();
+	spinPlanet.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	
 	Transform3D yAxis2 = new Transform3D();
-	Alpha rotor2Alpha = new Alpha(-1, 1000);
+	Alpha rotor2Alpha = new Alpha(-1, 1000);	
+	RotationInterpolator rotatorPlanet =
+	    new RotationInterpolator(rotor2Alpha, spinPlanet, yAxis2, 0.0f, (float) Math.PI*2.0f);
+	rotatorPlanet.setSchedulingBounds(bounds);
 	
-	RotationInterpolator rotator2 =
-	    new RotationInterpolator(rotor2Alpha, objRot, yAxis2, 0.0f, (float) Math.PI*2.0f);
-	rotator2.setSchedulingBounds(bounds);
+	objTransEarth.addChild(spinPlanet);
+	spinPlanet.addChild(rotatorPlanet);
 	
-	trans1.addChild(objRot);
-	trans1.addChild(rotator2);
-	
-	objRot.addChild(new ColorCube(0.2));
+	spinPlanet.addChild(new ColorCube(0.1));
 	// end of node
 	//----------------------------------
 	
+	// Moon
+	 
+	//  Moon translation - a static translation along the X-axis
+	Transform3D t1 = new Transform3D();
+	Vector3d positionMoon =  new Vector3d(0.3, 0.0, 0.0);
+	t1.set(positionMoon);
+	TransformGroup objTransMoon = new TransformGroup(t1);
+	objTransMoon.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	//objTransMoon.setCapability(TransformGroup.ALLOW_TRANSFORM_READ);
+	objTransEarth.addChild(objTransMoon);
+	
+	 /*
+	// Moon orbit - followed by an animated rotation around the Y axis
+	Transform3D yAxis3 = new Transform3D();
+	Alpha rotor3Alpha = new Alpha(-1, 10000);	
+	RotationInterpolator rotator3 =
+	    new RotationInterpolator(rotor3Alpha, objTransEarth, yAxis3, 0.0f, (float) Math.PI*2.0f);
+	//bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
+	rotator3.setSchedulingBounds(bounds);
+	
+	objTransEarth.addChild(rotator3);
+	  */
 	
 	
 	
+	objTransMoon.addChild(new ColorCube(0.05));
+	
+	 
 	
 	
-
-
+	
 	 // Have Java 3D perform optimizations on this scene graph.
 	 objRoot.compile();
 	 
@@ -131,6 +156,6 @@ public class HelloUniverse extends Applet {
     // as well as an applet
     //
     public static void main(String[] args) {
-      new MainFrame(new HelloUniverse(), 500, 500);
+      new MainFrame(new HelloUniverse(), 700, 700);
     }
 }
