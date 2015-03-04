@@ -27,45 +27,62 @@ public class HelloUniverse extends Applet {
     public BranchGroup createSceneGraph() {
     	
 	// Create the root of the branch graph
-	BranchGroup objRoot = new BranchGroup();
+	BranchGroup objRoot = new BranchGroup();	
+
 	
-	Transform3D t;
-	
-    // Create a Transformgroup to scale all objects so they
-    // appear in the scene.
-    TransformGroup objScale = new TransformGroup();
+    // a small static rotation around the X axis at the root of the scene graph
     Transform3D t3d = new Transform3D();
     t3d.rotX(Math.PI/12);
-    objScale.setTransform(t3d);
-    objRoot.addChild(objScale);
+	TransformGroup objViewTrans = new TransformGroup(t3d);
+    //objRotCamX.setTransform(t3d);
+    objRoot.addChild(objViewTrans);
 	
 	BoundingSphere bounds = new BoundingSphere(new Point3d(0.0,0.0,0.0), 100.0);
-	  
-	//objRoot.addChild(new ColorCube(0.4));
-	  
-	TransformGroup objRotate = new TransformGroup();
-	objRotate.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
-	objScale.addChild(objRotate);
-    
-	//  a static translation along the X-axis
-	t = new Transform3D();
-	Vector3d lPos1 =  new Vector3d(0.8, 0.0, 0.0);
-	t.set(lPos1);
-	TransformGroup l1Trans = new TransformGroup(t);
-	objRotate.addChild(l1Trans);
 	
-	l1Trans.addChild(new ColorCube(0.2));
+	TransformGroup objTransRot = new TransformGroup();
+	objTransRot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	objViewTrans.addChild(objTransRot);
+   
+	//  a static translation along the X-axis
+	Transform3D t = new Transform3D();
+	Vector3d newPos =  new Vector3d(0.6, 0.0, 0.0);
+	t.set(newPos);
+	TransformGroup trans1 = new TransformGroup(t);
+	objTransRot.addChild(trans1);
 	
 	// followed by an animated rotation around the Y axis
 	Transform3D yAxis = new Transform3D();
-	Alpha rotor1Alpha = new Alpha(-1, 4000);
+	Alpha rotor1Alpha = new Alpha(-1, 10000);
 	
 	RotationInterpolator rotator1 =
-	    new RotationInterpolator(rotor1Alpha, objRotate, yAxis, 0.0f, (float) Math.PI*2.0f);
+	    new RotationInterpolator(rotor1Alpha, objTransRot, yAxis, 0.0f, (float) Math.PI*2.0f);
 	rotator1.setSchedulingBounds(bounds);
 	
-	objRotate.addChild(rotator1);
+	objTransRot.addChild(rotator1);
 	
+	// --
+	TransformGroup objRot = new TransformGroup();
+	objRot.setCapability(TransformGroup.ALLOW_TRANSFORM_WRITE);
+	Transform3D yAxis2 = new Transform3D();
+	Alpha rotor2Alpha = new Alpha(-1, 1000);
+	
+	RotationInterpolator rotator2 =
+	    new RotationInterpolator(rotor2Alpha, objRot, yAxis2, 0.0f, (float) Math.PI*2.0f);
+	rotator2.setSchedulingBounds(bounds);
+	
+	trans1.addChild(objRot);
+	trans1.addChild(rotator2);
+	
+	objRot.addChild(new ColorCube(0.2));
+	// end of node
+	//----------------------------------
+	
+	
+	
+	
+	
+	
+
 
 	 // Have Java 3D perform optimizations on this scene graph.
 	 objRoot.compile();
