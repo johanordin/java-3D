@@ -12,12 +12,24 @@ import java.applet.Applet;
 import java.awt.BorderLayout;
 import java.awt.event.*;
 import java.awt.GraphicsConfiguration;
+
+import javax.media.j3d.Alpha;
+import javax.media.j3d.Appearance;
+import javax.media.j3d.BoundingSphere;
+import javax.media.j3d.BranchGroup;
+import javax.media.j3d.Canvas3D;
+import javax.media.j3d.RotationInterpolator;
+import javax.media.j3d.Texture;
+import javax.media.j3d.TextureAttributes;
+import javax.media.j3d.Transform3D;
+import javax.media.j3d.TransformGroup;
+import javax.vecmath.Point3d;
+
 import com.sun.j3d.utils.applet.MainFrame;
 import com.sun.j3d.utils.geometry.Sphere;
 import com.sun.j3d.utils.image.TextureLoader;
-import com.sun.j3d.utils.universe.*;
-import javax.media.j3d.*;
-import javax.vecmath.*;
+import com.sun.j3d.utils.universe.SimpleUniverse;
+
 
 public class HelloEarth extends Applet {
 
